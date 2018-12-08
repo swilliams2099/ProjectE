@@ -30,48 +30,94 @@ public class BinarySearchTreeWithDups<T extends Comparable<? super T>> extends B
 
 	// YOUR CODE HERE! THIS METHOD CANNOT BE RECURSIVE.
 	public int countEntriesNonRecursive(T target) {
-		// this initial code is meant as a suggestion to get your started- use it or delete it!
+		// this initial code is meant as a suggestion to get your started- use it or
+		// delete it!
 		int count = 0;
 		BinaryNodeInterface<T> currentNode = getRootNode();
 
 		// consider a loop!
-		
+
 		return count;
 	}
 
-	// YOUR CODE HERE! MUST BE RECURSIVE!! YOU CAN ALSO CREATE A PRIVATE HELPER.
+
 	public int countGreaterRecursive(T target) {
-		// this initial code is meant as a suggestion to get your started- use it or delete it!
 		int count = 0;
 		BinaryNodeInterface<T> rootNode = getRootNode();
-		
-		// consider a helper method!
-		
+		if (rootNode.getData().compareTo(target) > 0) {
+			count = 1 + countGreaterRecursiveHelper(target, rootNode);
+		} else {
+			count = countGreaterRecursiveHelper(target, rootNode);
+		}
+
 		return count;
 	}
-		
-	// YOUR CODE HERE! MUST BE USE A STACK!! 
+
+	private int countGreaterRecursiveHelper(T target, BinaryNodeInterface<T> newRoot) {
+		int helperCount = 0;
+		if (!newRoot.hasLeftChild() && !newRoot.hasRightChild()) { // base case for recursion
+			if (newRoot.getData().compareTo(target) > 0) {
+				helperCount++;
+			}
+		}
+
+		if (newRoot.hasLeftChild()) {
+			if (newRoot.getLeftChild().getData().compareTo(target) > 0) { // recursive call on left child if it exists
+				helperCount = 1 + countGreaterRecursiveHelper(target, newRoot.getLeftChild());
+			} else {
+				helperCount = countGreaterRecursiveHelper(target, newRoot.getLeftChild());
+			}
+		}
+
+		if (newRoot.hasRightChild()) {
+			if (newRoot.getLeftChild().getData().compareTo(target) > 0) { // recursive call on right child if it exists
+				helperCount = 1 + countGreaterRecursiveHelper(target, newRoot.getRightChild());
+			} else {
+				helperCount = countGreaterRecursiveHelper(target, newRoot.getRightChild());
+			}
+		}
+
+		return helperCount;
+	}
+
+
 	public int countGreaterWithStack(T target) {
-		// this initial code is meant as a suggestion to get your started- use it or delete it!
 		int count = 0;
-		BinaryNodeInterface<T> rootNode = getRootNode();
+		BinaryNodeInterface<T> rootNode = this.getRootNode();
 		Stack<BinaryNodeInterface<T>> nodeStack = new Stack<BinaryNodeInterface<T>>();
 		nodeStack.push(rootNode);
 
-		// consider a loop based on the stack!
+		while (!nodeStack.isEmpty()) {
+			BinaryNodeInterface<T> currentNode = nodeStack.pop();
+
+			if (currentNode.getData().compareTo(target) > 0) {
+				count++;
+
+			}
+
+			if (currentNode.getLeftChild() != null) {
+				nodeStack.push(currentNode.getLeftChild());
+			}
+
+			if (currentNode.getRightChild() != null) {
+				nodeStack.push(currentNode.getRightChild());
+
+			}
+		}
+		
 		return count;
 	}
-		
+
 	// YOUR EXTRA CREDIT CODE HERE! THIS METHOD MUST BE O(n).
 	public int countUniqueValues() {
 		return 0;
 	}
-	
+
 	public int getLeftHeight() {
 		BinaryNodeInterface<T> rootNode = getRootNode();
-		if(rootNode==null) {
+		if (rootNode == null) {
 			return 0;
-		} else if(!rootNode.hasLeftChild()) {
+		} else if (!rootNode.hasLeftChild()) {
 			return 0;
 		} else {
 			return rootNode.getLeftChild().getHeight();
@@ -80,15 +126,13 @@ public class BinarySearchTreeWithDups<T extends Comparable<? super T>> extends B
 
 	public int getRightHeight() {
 		BinaryNodeInterface<T> rootNode = getRootNode();
-		if(rootNode==null) {
+		if (rootNode == null) {
 			return 0;
-		} else if(!rootNode.hasRightChild()) {
+		} else if (!rootNode.hasRightChild()) {
 			return 0;
 		} else {
 			return rootNode.getRightChild().getHeight();
 		}
 	}
-	
-
 
 }
