@@ -97,53 +97,51 @@ public class BinarySearchTreeWithDups<T extends Comparable<? super T>> extends B
 		// this initial code is meant as a suggestion to get your started- use it or
 		// delete it!
 		int count = 0;
+		// binary search with count
 		BinaryNodeInterface<T> currentNode = getRootNode();
-		
+		// how to get to end of 
+		while (currentNode != null) {
+			T currentEntry = currentNode.getData();
+			
+			if (target.equals(currentEntry)) {
+				count++;
+				currentNode = currentNode.getLeftChild();	
+			} else if (target.compareTo(currentEntry) < 0) {
+				currentNode = currentNode.getLeftChild();
+			} else {
+				currentNode = currentNode.getRightChild();
+			}
+			
+		}
 		// consider a loop!
 
 		return count;
 	}
 
-
 	public int countGreaterRecursive(T target) {
 		int count = 0;
 		BinaryNodeInterface<T> rootNode = getRootNode();
-		if (rootNode.getData().compareTo(target) > 0) {
-			count = 1 + countGreaterRecursiveHelper(target, rootNode);
-		} else {
-			count = countGreaterRecursiveHelper(target, rootNode);
-		}
+		count = countGreaterRecursiveHelper(target, rootNode);
 
 		return count;
 	}
 
 	private int countGreaterRecursiveHelper(T target, BinaryNodeInterface<T> newRoot) {
 		int helperCount = 0;
-		if (!newRoot.hasLeftChild() && !newRoot.hasRightChild()) { // base case for recursion
-			if (newRoot.getData().compareTo(target) > 0) {
-				helperCount++;
-			}
+		if (newRoot.getData().compareTo(target) > 0) {
+			helperCount++;
 		}
 
 		if (newRoot.hasLeftChild()) {
-			if (newRoot.getLeftChild().getData().compareTo(target) > 0) { // recursive call on left child if it exists
-				helperCount = 1 + countGreaterRecursiveHelper(target, newRoot.getLeftChild());
-			} else {
-				helperCount = countGreaterRecursiveHelper(target, newRoot.getLeftChild());
-			}
+			helperCount += countGreaterRecursiveHelper(target, newRoot.getLeftChild());
 		}
 
 		if (newRoot.hasRightChild()) {
-			if (newRoot.getLeftChild().getData().compareTo(target) > 0) { // recursive call on right child if it exists
-				helperCount = 1 + countGreaterRecursiveHelper(target, newRoot.getRightChild());
-			} else {
-				helperCount = countGreaterRecursiveHelper(target, newRoot.getRightChild());
-			}
+			helperCount += countGreaterRecursiveHelper(target, newRoot.getRightChild());
 		}
 
 		return helperCount;
 	}
-
 
 	public int countGreaterWithStack(T target) {
 		int count = 0;
@@ -168,9 +166,10 @@ public class BinarySearchTreeWithDups<T extends Comparable<? super T>> extends B
 
 			}
 		}
-		
+
 		return count;
 	}
+
 
 	// YOUR EXTRA CREDIT CODE HERE! THIS METHOD MUST BE O(n).
 	public int countUniqueValues() {
